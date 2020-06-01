@@ -11,6 +11,9 @@ def delete2():
 def delete3():
     screen4.destroy()
         
+def delete4():
+    screen5.destroy()
+    
 def delete5():
     screen10.destroy()
     
@@ -185,27 +188,12 @@ def session():
     Button(screen8,text="View Notes",command=view_notes).pack()
     Label(screen8,text="",bg='orange').pack()
     Button(screen8,text="Delete Notes",command=delete_note).pack()
-    
-def login_success():
-    screen2.destroy()
-    session()
-
-def login_failure():
-    global screen4
-    screen4=Toplevel(screen)
-    screen4.title("Failure")
-    screen4.geometry("150x100")
-    screen4['bg']='orange'
-    Label(screen4,text="",bg='orange').pack()
-    Label(screen4,text="Wrong credentials",bg='white',fg='red',font=("Calibri",12)).pack()
-    Label(screen4,text="",bg='orange').pack()
-    Button(screen4,text="Ok",command=delete3).pack()
-    
+        
 
 def error():
     global screen7
     screen7=Toplevel(screen)
-    screen7.title("Register")
+    screen7.title("Failure")
     screen7.geometry("200x100")
     screen7['bg']='orange'
     Label(screen7,text="",bg="orange").pack()
@@ -217,7 +205,7 @@ def success():
     screen1.destroy()
     global screen6
     screen6=Toplevel(screen)
-    screen6.title("Register")
+    screen6.title("Success")
     screen6.geometry("200x100")
     screen6['bg']='orange'
     Label(screen6,text="",bg='orange').pack()
@@ -245,7 +233,7 @@ def register_user():
             insertData(d)
             success()
         else:
-            error()
+            username_error()
 
 
 def register():
@@ -273,22 +261,55 @@ def register():
     Label(screen1,text="",bg="orange").pack()
     Button(screen1,text="Register",width="10",height="1",command=register_user).pack()
 
+def username_error():
+    global screen5
+    screen5=Toplevel(screen)
+    screen5.title("Failure")
+    screen5.geometry("200x200")
+    screen5['bg']='orange'
+    Label(screen5,text="",bg="orange").pack()
+    Label(screen5,text="Username already occupied",bg='white',fg='red',font=("Calibri",12)).pack()
+    Label(screen5,text="",bg="orange").pack()
+    Label(screen5,text="Try another username",bg='white',fg='red',font=("Calibri",12)).pack()
+    Label(screen5,text="",bg="orange").pack()
+    Button(screen5,text="Ok",command=delete4).pack()    
+
+
+def login_success():
+    screen2.destroy()
+    session()
+
+def login_failure():
+    global screen4
+    screen4=Toplevel(screen)
+    screen4.title("Failure")
+    screen4.geometry("150x100")
+    screen4['bg']='orange'
+    Label(screen4,text="",bg='orange').pack()
+    Label(screen4,text="Wrong credentials",bg='white',fg='red',font=("Calibri",12)).pack()
+    Label(screen4,text="",bg='orange').pack()
+    Button(screen4,text="Ok",command=delete3).pack()
+
 
 def login_verify():
     username1=username_verify.get()
     password1=password_verify.get()
     username_entry1.delete(0,END)
     password_entry1.delete(0,END)
-    
-    d=(username1,)
-    inputData=(username1,password1)
-    try:
-        if (validateData(d,inputData)):
-            login_success()
-        else:
+    if username1=="":
+        error()
+    elif password1=="":
+        error()
+    else:
+        d=(username1,)
+        inputData=(username1,password1)
+        try:
+            if (validateData(d,inputData)):
+                login_success()
+            else:
+                login_failure()
+        except IndexError:
             login_failure()
-    except IndexError:
-        login_failure()
     
 
 def login():
